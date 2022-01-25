@@ -21,7 +21,7 @@
 #+end_src
 
 #+RESULTS:
-: #<void>
+: 50
 
 ;; ex 1.7
 
