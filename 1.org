@@ -1,7 +1,13 @@
 ;; ex 1.2
+#+begin_src scheme
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5))))) (* 3 (- 6 2) (- 2 7)))
+#+end_src
+
+#+RESULTS:
+: -37/150
 
 ;; ex 1.3
+#+begin_src scheme
 (define (>? a b)
   (if (> a b) a b))
 
@@ -10,6 +16,12 @@
 
 (define (three-square a b c)
   (soq (>? a b) (>? a c)))
+
+(three-square 5 1 3)
+#+end_src
+
+#+RESULTS:
+: #<void>
 
 ;; ex 1.7
 
@@ -63,7 +75,54 @@
    ((= count 0) n-1)
    (else (f-in n-2 n-1 (f-f n-3 n-2 n-1) (- count 1)))))
 
-(define (f-iter n) n
+(define (f-iter n)
   (cond
    ((< n 3) n)
    (else (f-in 0 1 2 (- n 2)))))
+
+;; ex 1.12
+
+(define (pascal r c)
+  (cond
+   ((or (< c 1) (> c r)) 0)
+   ((or (= r c) (= c 1)) 1)
+   (else (+ (pascal (- r 1) c)) (pascal (- r 1) (+ c 1)))))
+
+;; ex 1.16
+
+(define (fast-expt-iter-inn b n a)
+  (cond
+   ((= n 0) a)
+   ((even? n) (fast-expt-iter-inn (square b) (/ n 2) a))
+   (else (fast-expt-iter-inn b (- n 1) (* a b)))))
+
+(define (fast-expt-iter b n)
+  (fast-expt-iter-inn b n 1))
+
+;; ex 1.17
+
+(define (mul a b)
+  (if (= b 0)
+      0
+      (+ a (mul a (- b 1)))))
+
+(define (double a) (* a 2))
+(define (halve a) (/ a 2))
+
+(trace-define (fast-mul a b)
+  (cond
+   ((= b 0) 0)
+   ((= b 1) a)
+   ((even? b) (fast-mul (double a) (halve b)))
+   (else (+ a (fast-mul a (- b 1))))))
+
+;; ex 1.18
+
+(trace-define (fast-mul-iter-inn a b acc)
+  (cond
+   ((= b 0) acc)
+   ((even? b) (fast-mul-iter-inn (double a) (halve b) acc))
+   (else (fast-mul-iter-inn a (- b 1) (+ acc a)))))
+
+(define (fast-mul-iter a b)
+  (fast-mul-iter-inn a b 0))
